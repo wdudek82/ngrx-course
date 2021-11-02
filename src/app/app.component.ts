@@ -10,6 +10,7 @@ import {
   Router,
 } from '@angular/router';
 import { AuthState } from './auth/reducers';
+import { AuthActions } from './auth/action-types';
 
 @Component({
   selector: 'app-root',
@@ -54,5 +55,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  logout() {}
+  logout() {
+    this.store.dispatch(AuthActions.logout());
+  }
 }
