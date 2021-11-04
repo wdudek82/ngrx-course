@@ -5,7 +5,6 @@ export function loginUser(req: Request, res: Response) {
   console.log('User login attempt ...');
 
   const { email, password } = req.body;
-
   const user = authenticate(email, password);
 
   if (user) {
