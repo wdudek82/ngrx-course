@@ -10,7 +10,6 @@ import {
   Router,
 } from '@angular/router';
 import { AuthState } from './auth/reducers';
-import { AuthActions } from './auth/action-types';
 import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 import { login, logout } from './auth/auth.actions';
 
