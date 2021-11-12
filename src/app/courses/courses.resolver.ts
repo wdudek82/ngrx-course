@@ -7,14 +7,15 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AppState } from '../reducers';
-import { Store } from '@ngrx/store';
-import { finalize, first, tap } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { filter, finalize, first, tap } from 'rxjs/operators';
 import { loadAllCourses } from './course.actions';
+import { areCoursesLoaded } from './couses.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CoursesResolver implements Resolve<AppState> {
+export class CoursesResolver implements Resolve<boolean> {
   private loading = false;
 
   constructor(private store: Store<AppState>) {}
@@ -22,14 +23,16 @@ export class CoursesResolver implements Resolve<AppState> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
-  ): Observable<AppState> {
+  ): Observable<boolean> {
     return this.store.pipe(
-      tap(() => {
-        if (!this.loading) {
+      select(areCoursesLoaded),
+      tap((coursesLoaded) => {
+        if (!this.loading && !coursesLoaded) {
           this.loading = true;
           this.store.dispatch(loadAllCourses());
         }
       }),
+      filter((coursesLoaded) => coursesLoaded),
       first(),
       finalize(() => {
         this.loading = false;
