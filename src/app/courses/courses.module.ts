@@ -37,20 +37,21 @@ import { coursesReducer } from './reducers/course.reducer';
 import { CourseEntityService } from './services/course-entity.service';
 import { CoursesResolver } from './services/courses.resolver';
 import { CoursesDataService } from './services/courses-data.service';
+import { LessonEntityService } from './services/lesson-entity.service';
 
 export const coursesRoutes: Routes = [
   {
     path: '',
     component: HomeComponent,
     resolve: {
-      courses: CoursesResolver
+      courses: CoursesResolver,
     },
   },
   {
     path: ':courseUrl',
     component: CourseComponent,
     resolve: {
-      courses: CoursesResolver
+      courses: CoursesResolver,
     },
   },
 ];
@@ -58,7 +59,15 @@ export const coursesRoutes: Routes = [
 const entityMetadata: EntityMetadataMap = {
   Course: {
     sortComparer: compareCourses,
-  }
+    entityDispatcherOptions: {
+      optimisticAdd: true,
+      optimisticUpdate: true,
+    },
+  },
+  Lesson: {
+    sortComparer: compareLessons,
+    entityDispatcherOptions: {},
+  },
 };
 
 @NgModule({
@@ -96,7 +105,12 @@ const entityMetadata: EntityMetadataMap = {
     CourseComponent,
   ],
   entryComponents: [EditCourseDialogComponent],
-  providers: [CoursesHttpService, CoursesResolver, CourseEntityService],
+  providers: [
+    CoursesHttpService,
+    CoursesResolver,
+    CourseEntityService,
+    LessonEntityService,
+  ],
 })
 export class CoursesModule {
   constructor(
